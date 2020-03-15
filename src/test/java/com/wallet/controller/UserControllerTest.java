@@ -1,6 +1,11 @@
 package com.wallet.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wallet.dto.UserDTO;
 import com.wallet.entity.User;
 import com.wallet.service.UserService;
 
@@ -34,11 +41,17 @@ public class UserControllerTest {
 	@Autowired
 	MockMvc mvc;
 	
-	public void testSave() {
-		 /*mvc.perform(MockMvcRequestBuilders.post(URL).content(getJsonPayload())
-				 .contentType(MediaType.APPLICATION_JSON)
-				 .ac))*/
+	@Test
+	public void testSave() throws Exception{
+		
+		BDDMockito.given(service.save(Mockito.any(User.class))).willReturn(getMockUser());
+		
+			mvc.perform(MockMvcRequestBuilders.post(URL).content(getJsonPayload())
+					 .contentType(MediaType.APPLICATION_JSON)
+					 .accept(MediaType.APPLICATION_JSON))
+			 .andExpect(status().isCreated());
 	}
+	
 	
 	public User getMockUser() {
 		User u = new User();
@@ -49,14 +62,14 @@ public class UserControllerTest {
 		return u;
 	}
 	
-	public String getJsonPayload() {
+	public String getJsonPayload() throws JsonProcessingException {
 		UserDTO  dto = new UserDTO();
 		dto.setEmail(EMAIL);
 		dto.setName(NAME);
 		dto.setPassword(PASSWORD);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		
+		return mapper.writeValueAsString(dto);
 	}
 	
 	

@@ -36,7 +36,7 @@ public class UserServiceTest {
 	
 	@Test
 	public void testFindByEmail() {
-		Optional<User> user = service.findByEmail("email@teste.com");
+		Optional<User> user = service.findByEmail("teste@teste.com");
 		
 		assertTrue(user.isPresent());
 	}
