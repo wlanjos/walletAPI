@@ -17,13 +17,13 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User save(User u) {
-		// TODO Auto-generated method stub
+
 		return repository.save(u);
 	}
 
 	@Override
 	public Optional<User> findByEmail(String email) {
-		// TODO Auto-generated method stub
+
 		return repository.findByEmailEquals(email);
 	}
 
